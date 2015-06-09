@@ -59,7 +59,7 @@ If you require a background task to communicate with the calling task to indicat
 # Hosting environment
 You can host background tasks using a range of different Azure platform services:
 
-- [**Azure Web Sites**](#azure-web-sites-and-webjobs). You can use WebJobs to execute custom jobs based on a range of different types of script or executable program within the context of the website. 
+- [**Azure Websites**](#azure-web-sites-and-webjobs). You can use WebJobs to execute custom jobs based on a range of different types of script or executable programs within the context of the website. 
 - [**Azure Cloud Services web and worker roles**](#azure-cloud-services-web-and-worker-roles). You can write code within a role that executes as a background task.
 - [**Azure Virtual Machines**](#azure-virtual-machines). If you have a Windows service or you want to use the Windows Task Scheduler, it is common to host your background tasks within a dedicated virtual machine.
 
@@ -176,10 +176,10 @@ For more information, see [Leader Election pattern](http://msdn.microsoft.com/en
 ## Conflicts
 If you have multiple instances of a background job, it is possible that they will compete for access to resources and services such as databases and storage. This concurrent access can result in resource contention, which may cause conflicts in availability of the services and in the integrity of data in storage. Resource contention can be resolved by using a pessimistic locking approach to prevent competing instances of a task from concurrently accessing a service, or corrupting data. 
 
-Another approach to resolve conflicts is to define background tasks as a singleton, so that there is only ever one instance running. However, this eliminates the reliability and performance benefits that a multiple-instance configuration could provide, especially if the UI can supply sufficient work to keep more than one background task busy. It is vital to ensure that the background task can automatically restart, and that it has sufficient capacity to cope with peaks in demand. This may be achieved by allocating a compute instance with sufficient resources, by implementing a queueing mechanism that can store requests for later execution when demand decreases, or by a combination of these techniques. 
+Another approach to resolve conflicts is to define background tasks as a singleton, so that there is only ever one instance running. However, this eliminates the reliability and performance benefits that a multiple-instance configuration could provide, especially if the UI can supply sufficient work to keep more than one background task busy. It is vital to ensure that the background task can automatically restart, and that it has sufficient capacity to cope with peaks in demand. This may be achieved by allocating a compute instance with sufficient resources, by implementing a queuing mechanism that can store requests for later execution when demand decreases, or by a combination of these techniques. 
 
 ## Coordination
-The background tasks may be complex, and require multiple individual tasks to execute to produce a result or to fulfil all the requirements. It is common in these scenarios to divide the task into smaller discreet steps or subtasks that can be executed by multiple consumers. Multi-step jobs can be more efficient and more flexible because individual steps may be reusable in multiple jobs. It is also easy to add, remove, or modify the order of the steps.
+The background tasks may be complex, and require multiple individual tasks to execute to produce a result or to fulfill all the requirements. It is common in these scenarios to divide the task into smaller discreet steps or subtasks that can be executed by multiple consumers. Multi-step jobs can be more efficient and more flexible because individual steps may be reusable in multiple jobs. It is also easy to add, remove, or modify the order of the steps.
 
 Coordinating multiple tasks and steps can be challenging, but there are three common patterns you can use to guide your implementation of a solution:
 
@@ -206,13 +206,13 @@ Consider the following points when planning how you will run background tasks in
 
 - The default **Run** method implementation in the **RoleEntryPoint** class contains a call to **Thread.Sleep(Timeout.Infinite)** that keeps the role alive indefinitely. If you override the **Run** method (which is typically necessary to execute background tasks) you must not allow your code to exit from the method unless you want to recycle the role instance.
 - A typical implementation of the **Run** method includes code to start each of the background tasks, and a loop construct that periodically checks the state of all the background tasks. It can restart any that fail, or monitor for cancellation tokens that indicate jobs have completed.
-- If a background task throws an unhandled exception, that task should be recycled while allowing any other background tasks in the role to continue running. However, if the exception is caused by corruption of objects outside the task, such as shared storage, the exception should be handled by your **RoleEntryPoint** class, all tasks should be cancelled, and the **Run** method allowed to end. Azure will then restart the role.
+- If a background task throws an unhandled exception, that task should be recycled while allowing any other background tasks in the role to continue running. However, if the exception is caused by corruption of objects outside the task, such as shared storage, the exception should be handled by your **RoleEntryPoint** class, all tasks should be canceled, and the **Run** method allowed to end. Azure will then restart the role.
 - Use the **OnStop** method to pause or kill background tasks and clean up resources. This may involve stopping long-running or multi-step tasks, and it is vital to consider how this can be done to avoid data inconsistencies. If a role instance stops for any reason other than a user-initiated shutdown, the code running in the **OnStop** method must complete within five minutes before it is forcibly terminated. Ensure that your code can complete in that time, or can tolerate not running to completion.  
 - The Azure load balancer starts directing traffic to the role instance when the **RoleEntryPoint.OnStart** method returns true. Therefore, consider putting all your initialization code in the **OnStart** method so that role instances that do not successfully initialize will not receive any traffic. 
 - You can use startup tasks in addition to the methods of the **RoleEntryPoint** class. You should use startup tasks to initialize any settings you need to change in the Azure load balancer because these tasks will execute before the role receives any requests. For more information, see [Run Startup Tasks in Azure](http://msdn.microsoft.com/en-us/library/azure/hh180155.aspx).
 - If there is an error in a startup task, it may force the role to continually restart. This can prevent you from performing a VIP swap back to a previously staged version because the swap requires exclusive access to the role, and this cannot be obtained while the role is restarting. To resolve this:
-	-  Add the following code to the beginning of the **OnStart** and **Run** methods in your role:
 
+   - Add the following code to the beginning of the **OnStart** and **Run** methods in your role:
 	```C#
 	var freeze = CloudConfigurationManager.GetSetting("Freeze");
 	if (freeze != null)
@@ -223,7 +223,6 @@ Consider the following points when planning how you will run background tasks in
 		}
 	}
 	```
-
    - Add the definition of the **Freeze** setting as a Boolean value to the ServiceDefinition.csdef and ServiceConfiguration.*.cscfg files for the role and set it to **false**. If the role goes into a repeated restart mode, you can change the setting to **true** to freeze role execution and allow it to be swapped with a previous version.
 
 # Resiliency considerations
