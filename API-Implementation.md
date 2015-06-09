@@ -8,7 +8,7 @@ Some topics in this guidance are under debate and changing in the future. We wel
 A carefully-designed RESTful web API defines the resources, relationships, and navigation schemes that are accessible to client applications. When you implement and deploy a web API, you should consider the physical requirements of the environment hosting the web API and the way in which the web API is constructed rather than the logical structure of the data. This guidance focusses on best practices for implementing a web API and publishing it to make it available to client applications. Security concerns are described separately in the API Security Guidance document. You can find detailed information about web API design in the API Design Guidance document.
 
 # Considerations for implementing a RESTful web API
-The following sections illustrate best practice for using the ASP.NET Web API template to build a RESTful web API. For detailed information on using the Web API template, visit the [Learn About ASP.NET Web API](http://www.asp.net/web-api) page on the Microsoft website.
+The following sections illustrate best practices for using the ASP.NET Web API template to build a RESTful web API. For detailed information on using the Web API template, visit the [Learn About ASP.NET Web API](http://www.asp.net/web-api) page on the Microsoft website.
 > **Note**: This guidance is accompanied by a sample solution that provides a complete, working solution of the principles described in the following sections. The solution is called Orders, and it includes a web API, test client, and unit tests. The web API is based on the scenario of an e-commerce system and exposes information about customers, orders, and products.
 
 ## Considerations for implementing request routing
@@ -41,7 +41,7 @@ In a service implemented by using the ASP.NET Web API, each request is routed to
 	);
 	```
 
-	This route directs requests that match the URI to the _GetOrdersForCustomer_ method in the _Customers_ controller. This method must take a single parameter named _custI_:
+	This route directs requests that match the URI to the _GetOrdersForCustomer_ method in the _Customers_ controller. This method must take a single parameter named _custId_:
 
 	```C#
 	public class CustomersController : ApiController
@@ -67,7 +67,7 @@ In a service implemented by using the ASP.NET Web API, each request is routed to
 
 - **Prefer attribute-based routing**.
 
-	Attribute-based routing provides an alternative means for connecting routes to methods in a controller. Rather than relying on the pattern-matching features of convention-based routing, you can explicitly annotate methods in a controller with the details of the route to which they should be associated. This approach help to remove possible ambiguities. Furthermore, as explicit routes are defined at design time this approach is more efficient than convention-based routing at runtime. The following code shows how to apply the _Route_ attribute to methods in the Customers controller. These methods also use the HttpGet attribute to indicate that they should respond to _HTTP GET_ requests. This attribute enables you to name your methods using any convenient naming scheme rather than that expected by convention-based routing. You can also annotate methods with the _HttpPost_, _HttpPut_, and _HttpDelete_ attributes to define methods that respond to other types of HTTP requests.
+	Attribute-based routing provides an alternative means for connecting routes to methods in a controller. Rather than relying on the pattern-matching features of convention-based routing, you can explicitly annotate methods in a controller with the details of the route to which they should be associated. This approach helps to remove possible ambiguities. Furthermore, as explicit routes are defined at design time this approach is more efficient than convention-based routing at runtime. The following code shows how to apply the _Route_ attribute to methods in the Customers controller. These methods also use the HttpGet attribute to indicate that they should respond to _HTTP GET_ requests. This attribute enables you to name your methods using any convenient naming scheme rather than that expected by convention-based routing. You can also annotate methods with the _HttpPost_, _HttpPut_, and _HttpDelete_ attributes to define methods that respond to other types of HTTP requests.
 
 	```C#
 	public class CustomersController : ApiController
@@ -369,7 +369,7 @@ The following code shows an example that traps different conditions and returns 
 
 	For further information, visit the [Exception Handling in ASP.NET Web API](http://www.asp.net/web-api/overview/error-handling/exception-handling) page on the Microsoft website.
 
-	> **Note**: Many web servers trap error conditions themselves before they reach the web API. For example, if you configure authentication for a web site and the user fails to provide the correct authentication information, the web server should respond with status code 401 (Unauthorized). Once a client has been authenticated, your code can perform its own checks to verify that the client should be able access the requested resource. If this authorization fails, you should return status code 403 (Forbidden).
+	> **Note**: Many web servers trap error conditions themselves before they reach the web API. For example, if you configure authentication for a website and the user fails to provide the correct authentication information, the web server should respond with status code 401 (Unauthorized). Once a client has been authenticated, your code can perform its own checks to verify that the client should be able access the requested resource. If this authorization fails, you should return status code 403 (Forbidden).
 
 - **Handle exceptions in a consistent manner and log information about errors**.
 
@@ -855,7 +855,7 @@ To make a web API available for client applications, the web API must be deploye
 
 - All requests must be authenticated and authorized, and the appropriate level of access control must be enforced.
 - A commercial web API might be subject to various quality guarantees concerning response times. It is important to ensure that host environment is scalable if the load can vary significantly over time.
-- If may be necessary to meter requests for monetization purposes.
+- It may be necessary to meter requests for monetization purposes.
 - It might be necessary to regulate the flow of traffic to the web API, and implement throttling for specific clients that have exhausted their quotas.
 - Regulatory requirements might mandate logging and auditing of all requests and responses.
 - To ensure availability, it may be necessary to monitor the health of the server hosting the web API and restart it if necessary.
@@ -887,9 +887,9 @@ Azure provides the API Management Service which you can use to publish and manag
 
 You can find full details describing how to perform these tasks on the [API Management](http://azure.microsoft.com/en-us/services/api-management/) page on the Microsoft website. The Azure API Management Service also provides its own REST interface, enabling you to build a custom interface for simplifying the process of configuring a web API. For more information, visit the [Azure API Management REST API Reference](https://msdn.microsoft.com/library/azure/dn776326.aspx) page on the Microsoft website.
 
-> **Tip**: Azure provides the Azure Traffic Manager which enables you to implement failover and load-balancing, and reduce latency across multiple instances of a web site hosted in different geographic locations. You can use Azure Traffic Manager in conjunction with the API Management Service; the API Management Service can route requests to instances of a web site through Azure Traffic Manager.  For more information, visit the [About Traffic Manager Load Balancing Methods](https://msdn.microsoft.com/library/azure/dn339010.aspx) page on the Microsoft website.
+> **Tip**: Azure provides the Azure Traffic Manager which enables you to implement failover and load-balancing, and reduce latency across multiple instances of a website hosted in different geographic locations. You can use Azure Traffic Manager in conjunction with the API Management Service; the API Management Service can route requests to instances of a website through Azure Traffic Manager.  For more information, visit the [About Traffic Manager Load Balancing Methods](https://msdn.microsoft.com/library/azure/dn339010.aspx) page on the Microsoft website.
 
-> In this structure, if you are using custom DNS names for your web sites, you should configure the appropriate CNAME record for each web site to point to the DNS name of the Azure Traffic Manager web site.
+> In this structure, if you are using custom DNS names for your websites, you should configure the appropriate CNAME record for each website to point to the DNS name of the Azure Traffic Manager website.
 
 ## Supporting developers building client applications
 Developers constructing client applications typically require information on how to access the web API, and documentation concerning the parameters, data types, return types, and return codes that describe the different requests and responses between the web service and the client application.
@@ -914,7 +914,7 @@ Creating a client-side SDK is a considerable undertaking as it has to be impleme
 Depending on how you have published and deployed your web API you can monitor the web API directly, or you can gather usage and health information by analyzing the traffic that passes through the API Management service.
 
 ### Monitoring a web API directly
-If you have implemented your web API by using the ASP.NET Web API template (either as a Web API project or as a Web role in an Azure cloud service) and Visual Studio 2013, you can gather availability, performance, and usage data by using ASP.NET Application Insights. Application Insights is a package that transparently tracks and records information about requests and responses when the web API is deployed to the cloud; once the package is installed and configured, you don't need to amend any code in your web API to use it. When you deploy the web API to an Azure web site, all traffic is examined and the following statistics are gathered:
+If you have implemented your web API by using the ASP.NET Web API template (either as a Web API project or as a Web role in an Azure cloud service) and Visual Studio 2013, you can gather availability, performance, and usage data by using ASP.NET Application Insights. Application Insights is a package that transparently tracks and records information about requests and responses when the web API is deployed to the cloud; once the package is installed and configured, you don't need to amend any code in your web API to use it. When you deploy the web API to an Azure website, all traffic is examined and the following statistics are gathered:
 
 - Server response time.
 - Number of server requests and the details of each request.
@@ -964,11 +964,11 @@ The nature of a web API brings its own additional requirements to verify that it
 	
 - Ensure that each operation returns the correct status codes for different combinations of input. For example:
 	- If a query is successful, it should return status code 200 (OK)
-	- If a resource is not found, the operation should returs HTTP status code 404 (Not Found).
+	- If a resource is not found, the operation should return HTTP status code 404 (Not Found).
 	- If the client sends a request that successfully deletes a resource, the status code should be 204 (No Content).
 	- If the client sends a request that creates a new resource, the status code should be 201 (Created)
 
-Watch out for unexpected response status codes in the 5xx range. These messages are usually reported by the host server to indicate that it was unable to fulfil a valid request.
+Watch out for unexpected response status codes in the 5xx range. These messages are usually reported by the host server to indicate that it was unable to fulfill a valid request.
 
 - Test the different request header combinations that a client application can specify and ensure that the web API returns the expected information in response messages. Examples of client request headers include:
 	- **Accept**. The format of the data in the body of the response should match the format specified by the client request. The Content-Type header of the response should specify the format of the data returned.
