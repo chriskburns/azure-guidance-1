@@ -16,7 +16,7 @@ Monitoring enables you to gain an insight into how well a system is functioning,
 - Tracking issues that occur, from initial report through to analysis of possible causes, rectification, consequent software updates, and deployment.
 - Tracing operations and debugging software releases.
 
-> **Note**: This list is not intended to be comprehensive. This document focusses on these scenarios as the most common situations for performing monitoring, but there may well be others that are less common or specific to your own environment. 
+> **Note**: This list is not intended to be comprehensive. This document focuses on these scenarios as the most common situations for performing monitoring, but there may well be others that are less common or specific to your own environment. 
 
 The following sections describe these scenarios in more detail. The information for each scenario is discussed in the following format:
 
@@ -70,7 +70,7 @@ The instrumentation data must be aggregated and correlated to support the follow
 
 - The immediate availability of the system and subsystems.
 - The availability failure rates of the system and subsystems. Ideally an operator should be able to correlate failures with specific activities; what was happening when the system failed?
-- An historical view of failure rates of the system or any subsystems across any specified time period, and the loading on the system (number of user requests for example) when a failure occurred.
+- A historical view of failure rates of the system or any subsystems across any specified time period, and the loading on the system (number of user requests for example) when a failure occurred.
 - The reasons for unavailability of the system or any subsystems. For example, service not running, loss of connectivity, connected but timing out, and connected but returning errors.
 
 You can calculate the percentage availability of a service over a period of time by using the formula:
@@ -115,7 +115,7 @@ As well as this high-level functional information, an operator should also be ab
 - Number of bytes written or read,
 - Middleware indicators, such as queue length.
 
-All visualizations should allow an operator to specify a time period; the data displayed could be a snapshot of the current situation and/or an historical view of the performance.
+All visualizations should allow an operator to specify a time period; the data displayed could be a snapshot of the current situation and/or a historical view of the performance.
 
 An operator should be able to raise an alert based on any performance measure for any given value during any specified time interval.
 
@@ -223,7 +223,7 @@ Many commercial systems are required to report real performance figures against 
 For internal purposes, an organization might also track the number and nature of incidents that caused services to fail. Learning how to resolve these issues quickly, or eliminate them completely, will help to reduce downtime and meet SLAs.
 
 ## Auditing
-Depending on the nature of the application, there may be statutory or other legal regulations that specify requirements for auditing the operations performed by users and recording all data access. Auditing can provide evidence linking customers to specific requests; non-repudiation is an important factor in many e-business systems to help maintain trust be between a customer and the organization responsible for the application or service.
+Depending on the nature of the application, there may be statutory or other legal regulations that specify requirements for auditing the operations performed by users and recording all data access. Auditing can provide evidence linking customers to specific requests; non-repudiation is an important factor in many e-business systems to help maintain trust between a customer and the organization responsible for the application or service.
 
 ### Requirements for auditing
 An analyst must be able to trace the sequence of business operations being performed by users so that you can reconstruct users' actions. This may be necessary simply as a matter of record, or as part of a forensic investigation.
@@ -311,7 +311,7 @@ You can envisage the entire monitoring and diagnostics process as a pipeline tha
 _Figure 1.
 The stages in the monitoring and diagnostics pipeline_
 
-Figure 1 highlights how the data for monitoring and diagnostics can come from a variety of data sources. The Instrumentation/Collection stage is concerned with instrumentation; determining which data to capture, how to capture it, and how to format this data so that it can be easily examined. The Analysis/Diagnosis phase takes the raw data and uses it to generate meaningful information that can be used to determine the state of the system. This information can be used to make decisions about possible actions to take, and the results can be fed back into the Instrumentation/Collection phase. The Visualization/Alerting stage phase presents a consumable view of the system state; it could display information in near real-time by using a series of dashboards, and it could generates reports, graphs, and charts to provide a historical view of the data that can help identify long-term trends. If information indicates that a KPI is likely to exceed acceptable bounds, then this stage can also trigger an alert to an operator. In some cases, an alert can also be used to trigger an automated process that attempts to take corrective actions, such as auto-scaling.
+Figure 1 highlights how the data for monitoring and diagnostics can come from a variety of data sources. The Instrumentation/Collection stage is concerned with instrumentation; determining which data to capture, how to capture it, and how to format this data so that it can be easily examined. The Analysis/Diagnosis phase takes the raw data and uses it to generate meaningful information that can be used to determine the state of the system. This information can be used to make decisions about possible actions to take, and the results can be fed back into the Instrumentation/Collection phase. The Visualization/Alerting stage phase presents a consumable view of the system state; it could display information in near real-time by using a series of dashboards, and it could generate reports, graphs, and charts to provide a historical view of the data that can help identify long-term trends. If information indicates that a KPI is likely to exceed acceptable bounds, then this stage can also trigger an alert to an operator. In some cases, an alert can also be used to trigger an automated process that attempts to take corrective actions, such as auto-scaling.
 
 Note that these steps constitute a continuous-flow process where the stages are happening in parallel. Ideally, all the phases should be dynamically configurable; at some points, especially when a system has been newly deployed or is experiencing problems, it may be necessary to gather extended data on a more frequent basis. At other times, it should be possible to revert to capturing a base-level of essential information to verify that the system is functioning properly.
 
@@ -453,14 +453,14 @@ For information about configuring and using Azure Diagnostics, visit the [Collec
 
 Telemetry data for a small-scale application running on a limited number of nodes can feasibly be stored in a single location using the approach just described. However, a complex, highly scalable, global cloud application might easily generate huge volumes of data from hundreds of web and worker roles, database shards, and other services. This flood of data could easily overwhelm the I/O bandwidth available with a single, central location. Therefore your telemetry solution must be scalable to prevent it acting as a bottleneck as the system expands, and ideally incorporate a degree of redundancy to reduce the risks of losing important monitoring information (such as auditing or billing data) if part of the system fails.
 
-To address these issues, you can implement queueing. Figure 4 shows this structure. In this architecture, the local monitoring agent (if it can be configured appropriately) or custom data collection service (if not) posts data to a queue, and a separate process running asynchronously (the Storage Writing Service in Figure 4) takes the data in this queue and writes it to shared storage. A message queue is suitable for this scenario as it provides at least once semantics ensuring that once posted, queued data will not be lost. The Storage Writing Service can be implemented by using a separate worker role.
+To address these issues, you can implement queuing. Figure 4 shows this structure. In this architecture, the local monitoring agent (if it can be configured appropriately) or custom data collection service (if not) posts data to a queue, and a separate process running asynchronously (the Storage Writing Service in Figure 4) takes the data in this queue and writes it to shared storage. A message queue is suitable for this scenario as it provides at least one semantic ensuring that once posted, queued data will not be lost. The Storage Writing Service can be implemented by using a separate worker role.
 
 ![](figures/Monitoring/BufferedQueue.png)
  
 _Figure 4. 
 Using a queue to buffer instrumentation data_
 
-The local data collection service can add data to a queue immediately it is received. The queue acts as a buffer and the storage writing service can retrieve and write the data at its own pace. By default, a queue operates on a first-in-first-out basis, but you can prioritize messages to accelerate them through the queue if they contain data that must be handled more quickly. For more information, see the [Priority Queue](https://msdn.microsoft.com/library/dn589794.aspx) pattern. Alternatively, you could use different channels (such as Service Bus Topics) to direct data to different destinations depending on the form of analytical processing required.
+The local data collection service can add data to a queue immediately after it is received. The queue acts as a buffer and the storage writing service can retrieve and write the data at its own pace. By default, a queue operates on a first-in-first-out basis, but you can prioritize messages to accelerate them through the queue if they contain data that must be handled more quickly. For more information, see the [Priority Queue](https://msdn.microsoft.com/library/dn589794.aspx) pattern. Alternatively, you could use different channels (such as Service Bus Topics) to direct data to different destinations depending on the form of analytical processing required.
 
 For scalability, you could run multiple instances of the storage writing service. If there is a high volume of events, you could use an event hub to dispatch the data to different compute resources for processing and storage.
 
@@ -480,7 +480,7 @@ The previous discussions have depicted a rather simplistic view of the way in wh
 _Figure 6.
 Partitioning data according to analytical and storage requirements_
 
-The same instrumentation data might be required for more than one purpose. For example, performance counters can be used to provide an historical view of system performance over time, but this information might also be combined with other usage data to generate customer billing information. In these situations, the same data might be sent to more than one destination, such as a document database which can act as a long-term store for holding billing information, and a multi-dimensional store for handling complex performance analytics. 
+The same instrumentation data might be required for more than one purpose. For example, performance counters can be used to provide a historical view of system performance over time, but this information might also be combined with other usage data to generate customer billing information. In these situations, the same data might be sent to more than one destination, such as a document database which can act as a long-term store for holding billing information, and a multi-dimensional store for handling complex performance analytics. 
 
 You should also consider how urgently the data is required. Data that provides information for alerting needs to be accessed quickly, and so should be held in fast data storage and indexed or structured to optimize the queries that the alerting system performs. In some cases, it may be necessary for the telemetry service that gathers the data on each node to format and save data locally so that a local instance of the alerting system can quickly notify of any issues. The same data can be dispatched to the storage writing service shown in the previous diagrams and stored centrally if it is also required for other purposes.
 
@@ -506,7 +506,7 @@ An important part of the monitoring and diagnostics process is analyzing the dat
 As described in the section [Consolidating Instrumentation Data](#insertlink#), the data for each part of the system is typically captured locally, but generally needs to be combined with data generated at other sites that participate in the system. This information requires careful correlation to ensure that data is combined accurately. For example, the usage data for an operation may span a node hosting a web site to which a user connects, a node running a separate service accessed as part of this operation, and data storage held on a further node. This information needs to be tied together to provide an overall view of the resource and processing usage for the operation. Some pre-processing and filtering of data might occur on the node on which the data is captured, while aggregation and formatting is more likely to occur on a central node.
 
 ### Supporting hot, warm, and cold analysis
-Analyzing and reformatting data for visualization, reporting, and alerting purposes can be a complex process that consumes its own set of resources. Some forms of monitoring are time critical and require immediate analysis of data to be effective. This is known as _hot analysis_. Examples include the analyses required for alerting and some aspects of security monitoring (such as detecting an attack on the system). Data required for these purposes must be quickly available and structured for efficient processing; it some cases it may be necessary to move the analysis processing to the individual nodes on which the data is held.
+Analyzing and reformatting data for visualization, reporting, and alerting purposes can be a complex process that consumes its own set of resources. Some forms of monitoring are time critical and require immediate analysis of data to be effective. This is known as _hot analysis_. Examples include the analyses required for alerting and some aspects of security monitoring (such as detecting an attack on the system). Data required for these purposes must be quickly available and structured for efficient processing; in some cases it may be necessary to move the analysis processing to the individual nodes on which the data is held.
 
 Other forms of analysis are less time-critical and may require some computation and aggregation once the raw data has been received. This is known as _warm analysis_. Performance analysis often  falls into this category. In this case, an isolated, single performance event is unlikely to be statistically significant (it could be caused by a sudden spike or glitch), whereas the data from a series of events should provide a more reliable picture of system performance. Warm analysis can also be used to help diagnose health issues. A health event is typically processed by performing hot analysis and can raise an alert immediately. An operator should be able to drill into the reasons for the health event by examining the data from the warm path; this data should contain information about the events leading up to the issue that caused the health event.
 
